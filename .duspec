@@ -1,0 +1,21 @@
+{
+  "id":"deltics.contracts",
+  "version":"",
+  "summary":"A lightweight, moderately extensible framework for implementing argument checks.",
+  "tags":[
+    "deltics",
+    "contracts"
+  ],
+  "copyright":"\u00A92019 Jolyon Direnko-Smith",
+  "language":"en",
+  "content":"source",
+  "dependencies":[
+    "deltics.exceptions:1.0.0-beta.3"
+  ],
+  "source":{
+      "files":[
+        "src\\deltics.contracts.inc",
+        "src\\Deltics.Contracts.pas"
+      ]
+    }
+}
