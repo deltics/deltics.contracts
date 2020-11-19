@@ -35,7 +35,8 @@ interface
 implementation
 
   uses
-    SysUtils;
+    SysUtils,
+    Deltics.Exceptions;
 
 
   procedure RaiseArgumentException(const aMessage: String); {$ifdef InlineMethods} inline; {$endif}
@@ -66,7 +67,7 @@ implementation
     procedure Replace(const aToken: String; const aValue: String);
     begin
       if Pos('{' + aToken + '}', result) = -1 then
-        raise EInvalidOpException.CreateFmt('No value for token ''%s''', [aToken]);
+        raise EInvalidOperation.CreateFmt('No value for token ''%s''', [aToken]);
 
       result := StringReplace(result, '{' + aToken + '}', aValue, [rfReplaceAll, rfIgnoreCase]);
     end;
