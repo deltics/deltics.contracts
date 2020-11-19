@@ -1,3 +1,42 @@
+{
+  * X11 (MIT) LICENSE *
+
+  Copyright ©2020 Jolyon Direnko-Smith
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy of
+   this software and associated documentation files (the "Software"), to deal in
+   the Software without restriction, including without limitation the rights to
+   use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+   of the Software, and to permit persons to whom the Software is furnished to do
+   so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+
+  * GPL and Other Licenses *
+
+  The FSF deem this license to be compatible with version 3 of the GPL.
+   Compatability with other licenses should be verified by reference to those
+   other license terms.
+
+
+  * Contact Details *
+
+  Original author : Jolyon Direnko-Smith
+  skype           : deltics
+  github          : <EXTLINK https://github.com/deltics>github</EXTLINK>
+  e-mail          : <EXTLINK mailto: jsmith@deltics.co.nz>jsmith@deltics.co.nz</EXTLINK>
+  website         : <EXTLINK http://www.deltics.co.nz>www.deltics.co.nz</EXTLINK>
+}
 
 {$i deltics.contracts.inc}
 
@@ -7,223 +46,92 @@
 interface
 
   uses
-    SysUtils,
-    Deltics.Exceptions;
+    Deltics.Exceptions,
+    Deltics.Contracts.Interfaces;
 
 
   type
-    CoreContractMethodsBase = class;
-    CoreContracts = class of CoreContractMethodsBase;
-    CoreContractsWithOptionalArgumentNaming = class of CoreContractMethods;
-
-
-    CoreContractMethodsBase = class
-    public
-      class procedure Assigned(const aValue);
-      class procedure NotEmpty(const aValue: String); overload;
-      class procedure NotEmpty(const aValue: String; var aReturnsLength: Integer); overload;
-    {$ifdef UNICODE}
-      class procedure NotEmpty(const aValue: AnsiString); overload;
-      class procedure NotEmpty(const aValue: AnsiString; var aReturnsLength: Integer); overload;
-    {$endif}
-      class procedure NotEmpty(const aValue: WideString); overload;
-      class procedure NotEmpty(const aValue: WideString; var aReturnsLength: Integer); overload;
-      class procedure NotGreaterThan(aMaximumValue, aValue: Integer);
-      class procedure NotLessThan(aMinimumValue, aValue: Integer);
-      class procedure ValidIndexForString(const aString: String; aIndex: Integer); overload;
-    {$ifdef UNICODE}
-      class procedure ValidIndexForString(const aString: AnsiString; aIndex: Integer); overload;
-    {$endif}
-      class procedure ValidIndexForString(const aString: WideString; aIndex: Integer); overload;
-    end;
-
-
-    CoreContractMethods = class(CoreContractMethodsBase)
-    public
-      class function Argument(const aName: String): CoreContracts;
-    end;
-
-
     EArgumentException = Deltics.Exceptions.EArgumentException;
 
 
-  function Require: CoreContractsWithOptionalArgumentNaming; overload;
-  procedure Require(aValue: Boolean; const aMessage: String = ''); overload;
+  procedure Require(const aArgument: String; aIsValid: Boolean); overload;
+  function Require(const aArgument: String; aValue: AnsiChar): CharContracts; overload;
+  function Require(const aArgument: String; aValue: WideChar): WideCharContracts; overload;
+  function Require(const aArgument: String; aValue: Integer): IntegerContracts; overload;
+  function Require(const aArgument: String; aValue: Pointer): PointerContracts; overload;
+  function Require(const aArgument: String; const aValue: String): StringContracts; overload;
+  function Require(const aArgument: String; const aValue: WideString): StringContracts; overload;
+
+{$ifdef UNICODE}
+  function Require(const aArgument: String; const aValue: AnsiString): StringContracts; overload;
+{$endif}
 
 
-  // This may look a little odd but there is method in the madness...
-  //
-  // By declaring a procedure type for the RaiseArgumentExceptionProc, any frameworks
-  //  which wish to extend the CoreContractMethods class (e.g. deltics.strings) can
-  //  re-declare their own RaiseArgumentException constant and set it equal to the
-  //  method in this unit:
-  //
-  //  const
-  //    RaiseArgumentException : RaiseArgumentExceptionProc = Deltics.Contracts._RaiseArgumentException;
-  //
-  // Consumers of the unit containing the CoreContractMethods extension in that framework
-  //  are then able to also DIRECTLY call the RaiseArgumentException method via that
-  //  constant, without having to also use the underlying Deltics.Contracts unit or
-  //  a wrapper method.
-
-  type
-    RaiseArgumentExceptionProc = procedure(const aMessage: String);
-
-  procedure _RaiseArgumentException(const aMessage: String);
-
-  const
-    RaiseArgumentException : RaiseArgumentExceptionProc = _RaiseArgumentException;
 
 
 implementation
 
+  uses
+    Deltics.Contracts.ForChars,
+    Deltics.Contracts.ForIntegers,
+    Deltics.Contracts.ForPointers,
+    Deltics.Contracts.ForStrings,
+  {$ifdef UNICODE}
+    Deltics.Contracts.ForAnsiStrings,
+  {$endif}
+    Deltics.Contracts.ForWideStrings;
 
-  var
-    _ArgumentName: String = '';
 
 
-  procedure _RaiseArgumentException(const aMessage: String);
+  procedure Require(const aArgument: String; aIsValid: Boolean); overload;
   begin
-    Require(FALSE, aMessage);
+    if NOT aIsValid then
+      raise EArgumentException.Create(aArgument + ' is invalid');
   end;
 
 
-  function Require: CoreContractsWithOptionalArgumentNaming;
+  function Require(const aArgument: String; aValue: AnsiChar): CharContracts;
   begin
-    result := CoreContractMethods;
+    result := AnsiCharContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  procedure Require(      aValue: Boolean;
-                    const aMessage: String);
-  var
-    msg: String;
+  function Require(const aArgument: String; aValue: WideChar): WideCharContracts;
   begin
-    if aValue then
-      EXIT;
-
-    msg := StringReplace(aMessage, 'argument ', _ArgumentName + ' ', [rfReplaceAll, rfIgnoreCase]);
-
-    if msg = '' then
-      msg := 'Invalid argument'
-    else
-      msg := 'Invalid argument.  ' + msg;
-
-    _ArgumentName := '';
-
-    raise EArgumentException.Create(msg);
+    result := WideCharContractsImpl.Create(aArgument, aValue);
   end;
 
 
-
-
-{ Contract --------------------------------------------------------------------------------------- }
-
-  class function CoreContractMethods.Argument(const aName: String): CoreContracts;
+  function Require(const aArgument: String; aValue: Integer): IntegerContracts;
   begin
-    _ArgumentName := aName;
-
-    result := CoreContractMethods;
+    result := IntegerContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  class procedure CoreContractMethodsBase.Assigned(const aValue);
-  var
-    p: Pointer absolute aValue;
+  function Require(const aArgument: String; aValue: Pointer): PointerContracts;
   begin
-    Require(System.Assigned(p), 'Argument{arg} cannot be NIL');
+    result := PointerContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  class procedure CoreContractMethodsBase.NotEmpty(const aValue: String);
+  function Require(const aArgument: String; const aValue: String): StringContracts;
   begin
-    Require(aValue <> '', 'Argument cannot be an empty string');
+    result := StringContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  class procedure CoreContractMethodsBase.NotEmpty(const aValue: String;
-                                                   var   aReturnsLength: Integer);
+  function Require(const aArgument: String; const aValue: WideString): StringContracts;
   begin
-    aReturnsLength := Length(aValue);
-    Require(aReturnsLength > 0, 'Argument cannot be an empty string');
+    result := WideStringContractsImpl.Create(aArgument, aValue);
   end;
 
 
 {$ifdef UNICODE}
-
-  class procedure CoreContractMethodsBase.NotEmpty(const aValue: AnsiString);
+  function Require(const aArgument: String; const aValue: AnsiString): StringContracts;
   begin
-    Require(aValue <> '', 'Argument cannot be an empty string');
+    result := AnsiStringContractsImpl.Create(aArgument, aValue);
   end;
-
-
-  class procedure CoreContractMethodsBase.NotEmpty(const aValue: AnsiString;
-                                                   var   aReturnsLength: Integer);
-  begin
-    aReturnsLength := Length(aValue);
-    Require(aReturnsLength > 0, 'Argument cannot be an empty string');
-  end;
-
 {$endif}
-
-
-  class procedure CoreContractMethodsBase.NotEmpty(const aValue: WideString);
-  begin
-    Require(aValue <> '', 'Argument cannot be an empty string');
-  end;
-
-
-  class procedure CoreContractMethodsBase.NotEmpty(const aValue: WideString;
-                                                   var   aReturnsLength: Integer);
-  begin
-    aReturnsLength := Length(aValue);
-    Require(aReturnsLength > 0, 'Argument cannot be an empty string');
-  end;
-
-
-  class procedure CoreContractMethodsBase.NotGreaterThan(aMaximumValue: Integer;
-                                                         aValue: Integer);
-  begin
-    Require(aValue <= aMaximumValue, Format('Argument cannot be greater than %d', [aMaximumValue]));
-  end;
-
-
-  class procedure CoreContractMethodsBase.NotLessThan(aMinimumValue: Integer;
-                                                      aValue: Integer);
-  begin
-    Require(aValue >= aMinimumValue, Format('Argument cannot be less than %d', [aMinimumValue]));
-  end;
-
-
-  class procedure CoreContractMethodsBase.ValidIndexForString(const aString: String;
-                                                                    aIndex: Integer);
-  begin
-    Require((aIndex <= Length(aString)) and (aIndex > 0),
-            'Argument is not a valid index for string');
-  end;
-
-
-{$ifdef UNICODE}
-
-  class procedure CoreContractMethodsBase.ValidIndexForString(const aString: AnsiString;
-                                                                    aIndex: Integer);
-  begin
-    Require((aIndex <= Length(aString)) and (aIndex > 0),
-            'Argument is not a valid index for string');
-  end;
-
-{$endif}
-
-
-  class procedure CoreContractMethodsBase.ValidIndexForString(const aString: WideString;
-                                                                    aIndex: Integer);
-  begin
-    Require((aIndex <= Length(aString)) and (aIndex > 0),
-            'Argument is not a valid index for string');
-  end;
-
-
-
 
 
 end.

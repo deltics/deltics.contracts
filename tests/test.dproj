@@ -1,4 +1,4 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{24711A31-9B80-416B-8C4F-3922C88E679E}</ProjectGuid>
         <ProjectVersion>14.6</ProjectVersion>
@@ -45,6 +45,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_Define>debug_DelticsContracts;$(DCC_Define)</DCC_Define>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <Manifest_File>None</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>
@@ -83,10 +84,7 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <DCC_DebugDCUs>false</DCC_DebugDCUs>
-        <Debugger_RunParams>-wait</Debugger_RunParams>
         <DCC_UnitSearchPath>..\..\deltics.rtl\src;..\..\deltics.smoketest\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <Manifest_File>None</Manifest_File>
-        <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -100,9 +98,22 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="..\src\Deltics.Contracts.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.Interfaces.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.ForIntegers.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.ForStrings.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.ForAnsiStrings.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.ForWideStrings.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.Base.pas"/>
+        <DCCReference Include="Tests.ForStringContracts.pas"/>
+        <DCCReference Include="Tests.ForIntegerContracts.pas"/>
+        <DCCReference Include="Tests.ForAnsiStringContracts.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.ForChars.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.ForPointers.pas"/>
+        <DCCReference Include="Tests.ForPointerContracts.pas"/>
         <None Include="..\src\deltics.contracts.inc"/>
         <None Include="..\.duspec"/>
         <None Include=".duget"/>
+        <None Include="..\GitVersion.yml"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

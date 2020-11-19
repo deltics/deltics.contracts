@@ -10,12 +10,21 @@
   "language":"en",
   "content":"source",
   "dependencies":[
-    "deltics.exceptions:1.0.0-beta.3"
+    "deltics.inc:1.0.2",
+    "deltics.exceptions:1.0.0-beta.4"
   ],
   "source":{
       "files":[
         "src\\deltics.contracts.inc",
-        "src\\Deltics.Contracts.pas"
+        "src\\Deltics.Contracts.pas",
+        "src\\Deltics.Contracts.Base.pas",
+        "src\\Deltics.Contracts.Interfaces.pas",
+        "src\\Deltics.Contracts.ForChars.pas",
+        "src\\Deltics.Contracts.ForIntegers.pas",
+        "src\\Deltics.Contracts.ForPointers.pas",
+        "src\\Deltics.Contracts.ForAnsiStrings.pas",
+        "src\\Deltics.Contracts.ForStrings.pas",
+        "src\\Deltics.Contracts.ForWideStrings.pas"
       ]
     }
 }

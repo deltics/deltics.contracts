@@ -3,7 +3,7 @@
 
 {$debuginfo OFF}
 
-{$ifdef debugDelticsContracts}
+{$ifdef debug_DelticsContracts}
   {$undef InlineMethods}
   {$debuginfo ON}
 {$endif}
