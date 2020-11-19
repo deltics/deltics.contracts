@@ -3,14 +3,15 @@
 
   unit Deltics.Contracts.Base;
 
+
 interface
 
   uses
-    Deltics.Classes;
+    Classes;
 
 
   type
-    ContractsImpl = class(TComInterfacedObject)
+    ContractsImpl = class(TInterfacedObject)
     private
       fArgument: String;
       fRequired: String;
@@ -37,7 +38,7 @@ implementation
     SysUtils;
 
 
-  procedure RaiseArgumentException(const aMessage: String); {$ifdef InlineMethods} inline {$endif}
+  procedure RaiseArgumentException(const aMessage: String); {$ifdef InlineMethods} inline; {$endif}
   begin
     raise EArgumentException.Create(aMessage);
   end;
