@@ -57,7 +57,7 @@
         <DCC_S>false</DCC_S>
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
-        <DCC_UnitSearchPath>__duget\deltics.inc-1.0.2;__duget\deltics.exceptions-1.0.0-beta.3;__duget\deltics.smoketest-2.1.0-beta.45;__duget\..\..\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>__duget\deltics.exceptions-1.0.0-beta.4;__duget\deltics.inc-1.0.2;__duget\deltics.smoketest-2.1.0-beta.46;__duget\..\..\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSX32)'!=''">
         <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
@@ -98,17 +98,18 @@
         </DelphiCompile>
         <DCCReference Include="..\src\Deltics.Contracts.pas"/>
         <DCCReference Include="..\src\Deltics.Contracts.Interfaces.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.Base.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.ForChars.pas"/>
         <DCCReference Include="..\src\Deltics.Contracts.ForIntegers.pas"/>
+        <DCCReference Include="..\src\Deltics.Contracts.ForPointers.pas"/>
         <DCCReference Include="..\src\Deltics.Contracts.ForStrings.pas"/>
         <DCCReference Include="..\src\Deltics.Contracts.ForAnsiStrings.pas"/>
         <DCCReference Include="..\src\Deltics.Contracts.ForWideStrings.pas"/>
-        <DCCReference Include="..\src\Deltics.Contracts.Base.pas"/>
-        <DCCReference Include="Tests.ForStringContracts.pas"/>
         <DCCReference Include="Tests.ForIntegerContracts.pas"/>
-        <DCCReference Include="Tests.ForAnsiStringContracts.pas"/>
-        <DCCReference Include="..\src\Deltics.Contracts.ForChars.pas"/>
-        <DCCReference Include="..\src\Deltics.Contracts.ForPointers.pas"/>
         <DCCReference Include="Tests.ForPointerContracts.pas"/>
+        <DCCReference Include="Tests.ForStringContracts.pas"/>
+        <DCCReference Include="Tests.ForAnsiStringContracts.pas"/>
+        <DCCReference Include="Tests.ForWideStringContracts.pas"/>
         <None Include="..\src\deltics.contracts.inc"/>
         <None Include="..\.duspec"/>
         <None Include=".duget"/>
