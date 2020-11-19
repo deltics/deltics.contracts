@@ -1,4 +1,6 @@
 
+{$i test.inc}
+
   unit Tests.ForAnsiStringContracts;
 
 interface
@@ -9,6 +11,7 @@ interface
 
   type
     AnsiStringContractsTests = class(TTest)
+    {$ifdef UNICODE}
       procedure AnsiStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;
       procedure AnsiStringIsNotEmptyYieldsLengthWhenArgumentIsNotAnEmptyString;
       procedure AnsiStringIsNotEmptyRaisesExceptionWhenArgumentIsAnEmptyString;
@@ -20,11 +23,16 @@ interface
       procedure AnsiStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyCarriageReturns;
       procedure AnsiStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyLineFeeds;
       procedure AnsiStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyWhitespace;
+    {$else}
+      procedure NoTestMethods;
+    {$endif}
     end;
+
 
 
 implementation
 
+{$ifdef UNICODE}
   uses
     Deltics.Contracts;
 
@@ -165,8 +173,14 @@ implementation
       Test.AssertException(EArgumentException);
     end;
   end;
-
-
+{$else}
+  procedure AnsiStringContractsTests.NoTestMethods;
+  begin
+    // For non-Unicode compilers, AnsiStringContracts are provided by StringContracts
+    //  so there are no separate AnsiStringContracts and therefore nothing to test
+    TestRun.NoTestsPerformed;
+  end;
+{$endif}
 
 end.
 

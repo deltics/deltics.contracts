@@ -1,4 +1,6 @@
 
+{$i test.inc}
+
   unit Tests.ForIntegerContracts;
 
 

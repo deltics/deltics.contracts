@@ -6,7 +6,8 @@
 
 interface
 
-  uses
+{$ifdef UNICODE}
+uses
     Deltics.Contracts.Base,
     Deltics.Contracts.Interfaces;
 
@@ -23,11 +24,13 @@ interface
       function IsNotEmpty: IProvidesLength;
       function IsNotEmptyOrWhitespace: IProvidesLength;
     end;
+{$endif}
 
 
 
 implementation
 
+{$ifdef UNICODE}
   uses
     Windows;
 
@@ -118,6 +121,7 @@ implementation
 
     result := self;
   end;
+{$endif}
 
 
 
