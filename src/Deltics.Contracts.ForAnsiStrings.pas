@@ -6,6 +6,9 @@
 
 interface
 
+// Only UNICODE compilers need to distinguish between String and AnsiString.
+//  For non-UNICODE compilers, String == AnsiString.
+
 {$ifdef UNICODE}
 uses
     Deltics.Contracts.Base,
