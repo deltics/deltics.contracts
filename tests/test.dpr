@@ -3,7 +3,7 @@
 
 program test;
 
-  uses
+uses
   Deltics.Smoketest,
   Deltics.Contracts in '..\src\Deltics.Contracts.pas',
   Deltics.Contracts.Interfaces in '..\src\Deltics.Contracts.Interfaces.pas',
