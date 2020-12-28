@@ -43,37 +43,25 @@ implementation
 
   procedure IntegerContractsTests.IntegerIsGreaterThanDoesNotRaiseExceptionWhenValueIsGreaterThan;
   begin
-    try
-      Require('test', 10).IsGreaterThan(0);
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-    except
-      Test.AssertNoException;
-    end;
+    Require('test', 10).IsGreaterThan(0);
   end;
 
 
   procedure IntegerContractsTests.IntegerIsGreaterThanRaisesExceptionWhenValueIsEqual;
   begin
-    try
-      Require('test', 10).IsGreaterThan(10);
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 10).IsGreaterThan(10);
   end;
 
 
   procedure IntegerContractsTests.IntegerIsGreaterThanRaisesExceptionWhenValueIsLess;
   begin
-    try
-      Require('test', 10).IsGreaterThan(100);
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 10).IsGreaterThan(100);
   end;
 
 
@@ -82,15 +70,11 @@ implementation
     i: integer;
     s: String;
   begin
-    s := 'Not Empty';
-    try
-      for i := 1 to Length(s) do
-        Require('test', i).IsValidIndexForString(s);
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-    except
-      Test.AssertNoException;
-    end;
+    s := 'Not Empty';
+    for i := 1 to Length(s) do
+      Require('test', i).IsValidIndexForString(s);
   end;
 
 
@@ -100,54 +84,38 @@ implementation
     s: String;
     len: Integer;
   begin
-    s := 'Not Empty';
-    try
-      for i := 1 to Length(s) do
-      begin
-        Require('test', i).IsValidIndexForString(s).GetLength(len);
-        Test('GetActualLen').Assert(len).Equals(Length(s));
-      end;
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-    except
-      Test.AssertNoException;
+    s := 'Not Empty';
+    for i := 1 to Length(s) do
+    begin
+      Require('test', i).IsValidIndexForString(s).GetLength(len);
+      Test('GetActualLen').Assert(len).Equals(Length(s));
     end;
   end;
 
 
   procedure IntegerContractsTests.IntegerIsValidIndexForStringRaisesExceptionWhenArgumentIsLargerThanLength;
   begin
-    try
-      Require('test', 6).IsValidIndexForString('12345');
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 6).IsValidIndexForString('12345');
   end;
 
 
   procedure IntegerContractsTests.IntegerIsValidIndexForStringRaisesExceptionWhenArgumentIsLessThanOne;
   begin
-    try
-      Require('test', 0).IsValidIndexForString('12345');
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 0).IsValidIndexForString('12345');
   end;
 
 
   procedure IntegerContractsTests.IntegerIsValidIndexForStringRaisesExceptionWhenStringIsEmpty;
   begin
-    try
-      Require('test', 0).IsValidIndexForString('');
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 0).IsValidIndexForString('');
   end;
 
 
@@ -157,15 +125,11 @@ implementation
     i: integer;
     s: AnsiString;
   begin
-    s := 'Not Empty';
-    try
-      for i := 1 to Length(s) do
-        Require('test', i).IsValidIndexForString(s);
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-    except
-      Test.AssertNoException;
-    end;
+    s := 'Not Empty';
+    for i := 1 to Length(s) do
+      Require('test', i).IsValidIndexForString(s);
   end;
 
 
@@ -175,54 +139,38 @@ implementation
     s: AnsiString;
     len: Integer;
   begin
-    s := 'Not Empty';
-    try
-      for i := 1 to Length(s) do
-      begin
-        Require('test', i).IsValidIndexForString(s).GetLength(len);
-        Test('GetActualLen').Assert(len).Equals(Length(s));
-      end;
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-    except
-      Test.AssertNoException;
+    s := 'Not Empty';
+    for i := 1 to Length(s) do
+    begin
+      Require('test', i).IsValidIndexForString(s).GetLength(len);
+      Test('GetActualLen').Assert(len).Equals(Length(s));
     end;
   end;
 
 
   procedure IntegerContractsTests.IntegerIsValidIndexForAnsiStringRaisesExceptionWhenArgumentIsLargerThanLength;
   begin
-    try
-      Require('test', 6).IsValidIndexForString('12345');
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 6).IsValidIndexForString('12345');
   end;
 
 
   procedure IntegerContractsTests.IntegerIsValidIndexForAnsiStringRaisesExceptionWhenArgumentIsLessThanOne;
   begin
-    try
-      Require('test', 0).IsValidIndexForString('12345');
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 0).IsValidIndexForString('12345');
   end;
 
 
   procedure IntegerContractsTests.IntegerIsValidIndexForAnsiStringRaisesExceptionWhenStringIsEmpty;
   begin
-    try
-      Require('test', 0).IsValidIndexForString('');
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 0).IsValidIndexForString('');
   end;
 {$endif}
 
@@ -232,15 +180,11 @@ implementation
     i: integer;
     s: WideString;
   begin
-    s := 'Not Empty';
-    try
-      for i := 1 to Length(s) do
-        Require('test', i).IsValidIndexForString(s);
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-    except
-      Test.AssertNoException;
-    end;
+    s := 'Not Empty';
+    for i := 1 to Length(s) do
+      Require('test', i).IsValidIndexForString(s);
   end;
 
 
@@ -250,54 +194,38 @@ implementation
     s: WideString;
     len: Integer;
   begin
-    s := 'Not Empty';
-    try
-      for i := 1 to Length(s) do
-      begin
-        Require('test', i).IsValidIndexForString(s).GetLength(len);
-        Test('GetActualLen').Assert(len).Equals(Length(s));
-      end;
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-    except
-      Test.AssertNoException;
+    s := 'Not Empty';
+    for i := 1 to Length(s) do
+    begin
+      Require('test', i).IsValidIndexForString(s).GetLength(len);
+      Test('GetActualLen').Assert(len).Equals(Length(s));
     end;
   end;
 
 
   procedure IntegerContractsTests.IntegerIsValidIndexForWideStringRaisesExceptionWhenArgumentIsLargerThanLength;
   begin
-    try
-      Require('test', 6).IsValidIndexForString('12345');
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 6).IsValidIndexForString('12345');
   end;
 
 
   procedure IntegerContractsTests.IntegerIsValidIndexForWideStringRaisesExceptionWhenArgumentIsLessThanOne;
   begin
-    try
-      Require('test', 0).IsValidIndexForString('12345');
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 0).IsValidIndexForString('12345');
   end;
 
 
   procedure IntegerContractsTests.IntegerIsValidIndexForWideStringRaisesExceptionWhenStringIsEmpty;
   begin
-    try
-      Require('test', 0).IsValidIndexForString('');
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', 0).IsValidIndexForString('');
   end;
 
 

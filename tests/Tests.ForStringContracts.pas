@@ -33,25 +33,17 @@ implementation
 
   procedure StringContractsTests.StringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;
   begin
-    try
-      Require('test', '12345').IsNotEmpty;
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-    except
-      Test.AssertNoException;
-    end;
+    Require('test', '12345').IsNotEmpty;
   end;
 
 
   procedure StringContractsTests.StringIsNotEmptyRaisesExceptionWhenArgumentIsAnEmptyString;
   begin
-    try
-      Require('test', '').IsNotEmpty;
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', '').IsNotEmpty;
   end;
 
 
@@ -59,26 +51,19 @@ implementation
   var
     len: Integer;
   begin
-    try
-      Require('test', '12345').IsNotEmpty.GetLength(len);
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-      Test('GetActualLength').Assert(len).Equals(5);
-    except
-      Test.AssertNoException;
-    end;
+    Require('test', '12345').IsNotEmpty.GetLength(len);
+
+    Test('GetActualLength').Assert(len).Equals(5);
   end;
 
 
   procedure StringContractsTests.StringIsNotEmptyOrWhitespaceDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyWhitespaceString;
   begin
-    try
-      Require('test', '12345').IsNotEmptyOrWhitespace;
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-    except
-      Test.AssertNoException;
-    end;
+    Require('test', '12345').IsNotEmptyOrWhitespace;
   end;
 
 
@@ -86,86 +71,59 @@ implementation
   var
     len: Integer;
   begin
-    try
-      Require('test', '12345').IsNotEmptyOrWhitespace.GetLength(len);
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-      Test('GetActualLen').Assert(len).Equals(5);
-    except
-      Test.AssertNoException;
-    end;
+    Require('test', '12345').IsNotEmptyOrWhitespace.GetLength(len);
+
+    Test('GetActualLen').Assert(len).Equals(5);
   end;
 
 
   procedure StringContractsTests.StringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentIsAnEmptyString;
   begin
-    try
-      Require('test', '').IsNotEmptyOrWhitespace;
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', '').IsNotEmptyOrWhitespace;
   end;
 
 
   procedure StringContractsTests.StringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyCarriageReturns;
   begin
-    try
-      Require('test', #13#13).IsNotEmptyOrWhitespace;
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', #13#13).IsNotEmptyOrWhitespace;
   end;
 
 
   procedure StringContractsTests.StringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyLineFeeds;
   begin
-    try
-      Require('test', #10#10).IsNotEmptyOrWhitespace;
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', #10#10).IsNotEmptyOrWhitespace;
   end;
 
 
   procedure StringContractsTests.StringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlySpaces;
   begin
-    try
-      Require('', '  ').IsNotEmptyOrWhitespace;
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('', '  ').IsNotEmptyOrWhitespace;
   end;
 
 
   procedure StringContractsTests.StringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyTabs;
   begin
-    try
-      Require('test', #9#9).IsNotEmptyOrWhitespace;
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', #9#9).IsNotEmptyOrWhitespace;
   end;
 
 
   procedure StringContractsTests.StringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyWhitespace;
   begin
-    try
-      Require('test', #9#10#13 + ' ').IsNotEmptyOrWhitespace;
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', #9#10#13 + ' ').IsNotEmptyOrWhitespace;
   end;
 
 

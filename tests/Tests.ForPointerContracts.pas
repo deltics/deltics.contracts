@@ -29,25 +29,17 @@ implementation
 
   procedure PointerContractsTests.IsAssignedDoesNotNotRaiseExceptionWhenValueIsAssigned;
   begin
-    try
-      Require('test', @self).IsAssigned;
+    Test.RaisesNoException;
 
-      Test.AssertNoException;
-    except
-      Test.AssertNoException;
-    end;
+    Require('test', @self).IsAssigned;
   end;
 
 
   procedure PointerContractsTests.IsAssignedRaisesExceptionWhenValueIsNIL;
   begin
-    try
-      Require('test', NIL).IsAssigned;
+    Test.RaisesException(EArgumentException);
 
-      Test.AssertException(EArgumentException);
-    except
-      Test.AssertException(EArgumentException);
-    end;
+    Require('test', NIL).IsAssigned;
   end;
 
 
