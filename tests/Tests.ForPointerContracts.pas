@@ -31,7 +31,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', @self).IsAssigned;
+    Contract.Requires('test', @self).IsAssigned;
   end;
 
 
@@ -39,7 +39,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', NIL).IsAssigned;
+    Contract.Requires('test', NIL).IsAssigned;
   end;
 
 

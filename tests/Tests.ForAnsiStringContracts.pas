@@ -11,12 +11,12 @@ interface
 
   type
     AnsiStringContractsTests = class(TTest)
-      procedure AnsiStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;
-      procedure AnsiStringIsNotEmptyYieldsLengthWhenArgumentIsNotAnEmptyString;
-      procedure AnsiStringIsNotEmptyRaisesWhenArgumentIsAnEmptyString;
-      procedure AnsiStringIsNotEmptyOrWhitespaceDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyWhitespaceString;
-      procedure AnsiStringIsNotEmptyOrWhitespaceYieldsLengthWhenArgumentIsNotAnEmptyWhitespaceString;
-      procedure AnsiStringIsNotEmptyOrWhitespaceRaisesWhenArgumentIsAnEmptyString;
+      procedure AnsiStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnAnsiEmptyString;
+      procedure AnsiStringIsNotEmptyYieldsLengthWhenArgumentIsNotAnAnsiEmptyString;
+      procedure AnsiStringIsNotEmptyRaisesWhenArgumentIsAnAnsiEmptyString;
+      procedure AnsiStringIsNotEmptyOrWhitespaceDoesNotRaiseExceptionWhenArgumentIsNotAnAnsiEmptyWhitespaceString;
+      procedure AnsiStringIsNotEmptyOrWhitespaceYieldsLengthWhenArgumentIsNotAnAnsiEmptyWhitespaceString;
+      procedure AnsiStringIsNotEmptyOrWhitespaceRaisesWhenArgumentIsAnAnsiEmptyString;
       procedure AnsiStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlySpaces;
       procedure AnsiStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlyTabs;
       procedure AnsiStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlyCarriageReturns;
@@ -29,73 +29,64 @@ interface
 implementation
 
   uses
-    Deltics.Contracts;
-
-
-  const
-    Empty       : AnsiString = '';
-    Digits      : AnsiString = '12345';
-    Spaces      : AnsiString = '  ';
-    CRs         : AnsiString = #13#13;
-    LFs         : AnsiString = #10#10;
-    TABs        : AnsiString = #9#9;
-    Whitespace  : AnsiString = #9#10#13 + ' ';
+    Deltics.Contracts,
+    TestConsts;
 
 
 
-  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;
+  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnAnsiEmptyString;
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmpty;
+    Contract.Requires('test', AnsiDigits).IsNotEmpty;
   end;
 
 
-  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyRaisesWhenArgumentIsAnEmptyString;
+  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyRaisesWhenArgumentIsAnAnsiEmptyString;
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Empty).IsNotEmpty;
+    Contract.Requires('test', AnsiEmpty).IsNotEmpty;
   end;
 
 
-  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyYieldsLengthWhenArgumentIsNotAnEmptyString;
+  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyYieldsLengthWhenArgumentIsNotAnAnsiEmptyString;
   var
     len: Integer;
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmpty.GetLength(len);
+    Contract.Requires('test', AnsiDigits).IsNotEmpty.GetLength(len);
 
     Test('GetActualLength').Assert(len).Equals(5);
   end;
 
 
-  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyOrWhitespaceDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyWhitespaceString;
+  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyOrWhitespaceDoesNotRaiseExceptionWhenArgumentIsNotAnAnsiEmptyWhitespaceString;
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', AnsiDigits).IsNotEmptyOrWhitespace;
   end;
 
 
-  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyOrWhitespaceYieldsLengthWhenArgumentIsNotAnEmptyWhitespaceString;
+  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyOrWhitespaceYieldsLengthWhenArgumentIsNotAnAnsiEmptyWhitespaceString;
   var
     len: Integer;
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmptyOrWhitespace.GetLength(len);
+    Contract.Requires('test', AnsiDigits).IsNotEmptyOrWhitespace.GetLength(len);
 
     Test('GetActualLen').Assert(len).Equals(5);
   end;
 
 
-  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyOrWhitespaceRaisesWhenArgumentIsAnEmptyString;
+  procedure AnsiStringContractsTests.AnsiStringIsNotEmptyOrWhitespaceRaisesWhenArgumentIsAnAnsiEmptyString;
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Empty).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', AnsiEmpty).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -103,7 +94,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', CRs).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', AnsiCRs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -111,7 +102,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', LFs).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', AnsiLFs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -119,7 +110,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Spaces).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', AnsiSpaces).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -127,7 +118,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', TABs).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', AnsiTABs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -135,7 +126,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Whitespace).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', AnsiWhitespace).IsNotEmptyOrWhitespace;
   end;
 
 

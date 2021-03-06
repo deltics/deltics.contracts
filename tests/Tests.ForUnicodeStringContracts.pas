@@ -28,14 +28,15 @@ interface
 implementation
 
   uses
-    Deltics.Contracts;
+    Deltics.Contracts,
+    TestConsts;
 
 
   procedure UnicodeStringContractsTests.UnicodeStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;
   begin
     Test.RaisesNoException;
 
-    Require('test', '12345').IsNotEmpty;
+    Contract.Requires('test', UnicodeDigits).IsNotEmpty;
   end;
 
 
@@ -43,7 +44,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', '').IsNotEmpty;
+    Contract.Requires('test', UnicodeEmpty).IsNotEmpty;
   end;
 
 
@@ -53,7 +54,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', '12345').IsNotEmpty.GetLength(len);
+    Contract.Requires('test', UnicodeDigits).IsNotEmpty.GetLength(len);
 
     Test('GetActualLength').Assert(len).Equals(5);
   end;
@@ -63,7 +64,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', '12345').IsNotEmptyOrWhitespace;
+    Contract.Requires('test', UnicodeDigits).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -73,7 +74,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', '12345').IsNotEmptyOrWhitespace.GetLength(len);
+    Contract.Requires('test', UnicodeDigits).IsNotEmptyOrWhitespace.GetLength(len);
 
     Test('GetActualLen').Assert(len).Equals(5);
   end;
@@ -83,7 +84,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', '').IsNotEmptyOrWhitespace;
+    Contract.Requires('test', UnicodeEmpty).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -91,7 +92,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', #13#13).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', UnicodeCRs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -99,7 +100,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', #10#10).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', UnicodeLFs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -107,7 +108,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('', '  ').IsNotEmptyOrWhitespace;
+    Contract.Requires('test', UnicodeSpaces).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -115,7 +116,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', #9#9).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', UnicodeTABs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -123,7 +124,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', #9#10#13 + ' ').IsNotEmptyOrWhitespace;
+    Contract.Requires('test', UnicodeWhitespace).IsNotEmptyOrWhitespace;
   end;
 
 

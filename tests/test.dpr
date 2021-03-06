@@ -15,6 +15,7 @@ uses
   Deltics.Contracts.ForUnicodeStrings in '..\src\Deltics.Contracts.ForUnicodeStrings.pas',
   Deltics.Contracts.ForUtf8Strings in '..\src\Deltics.Contracts.ForUtf8Strings.pas',
   Deltics.Contracts.ForWideStrings in '..\src\Deltics.Contracts.ForWideStrings.pas',
+  TestConsts in 'TestConsts.pas',
   Tests.ForIntegerContracts in 'Tests.ForIntegerContracts.pas',
   Tests.ForPointerContracts in 'Tests.ForPointerContracts.pas',
   Tests.ForAnsiStringContracts in 'Tests.ForAnsiStringContracts.pas',

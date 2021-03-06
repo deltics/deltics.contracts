@@ -28,16 +28,8 @@ interface
 implementation
 
   uses
-    Deltics.Contracts;
-
-  const
-    Empty       : Utf8String = '';
-    Digits      : Utf8String = '12345';
-    Spaces      : Utf8String = '  ';
-    CRs         : Utf8String = #13#13;
-    LFs         : Utf8String = #10#10;
-    TABs        : Utf8String = #9#9;
-    Whitespace  : Utf8String = #9#10#13 + ' ';
+    Deltics.Contracts,
+    TestConsts;
 
 
 
@@ -45,7 +37,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmpty;
+    Contract.Requires('test', Utf8Digits).IsNotEmpty;
   end;
 
 
@@ -53,7 +45,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Empty).IsNotEmpty;
+    Contract.Requires('test', Utf8Empty).IsNotEmpty;
   end;
 
 
@@ -63,7 +55,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmpty.GetLength(len);
+    Contract.Requires('test', Utf8Digits).IsNotEmpty.GetLength(len);
 
     Test('GetActualLength').Assert(len).Equals(5);
   end;
@@ -73,7 +65,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', Utf8Digits).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -83,7 +75,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmptyOrWhitespace.GetLength(len);
+    Contract.Requires('test', Utf8Digits).IsNotEmptyOrWhitespace.GetLength(len);
 
     Test('GetActualLen').Assert(len).Equals(5);
   end;
@@ -93,7 +85,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Empty).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', Utf8Empty).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -101,7 +93,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', CRs).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', Utf8CRs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -109,7 +101,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', LFs).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', Utf8LFs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -117,7 +109,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Spaces).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', Utf8Spaces).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -125,7 +117,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', TABs).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', Utf8TABs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -133,7 +125,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Whitespace).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', Utf8Whitespace).IsNotEmptyOrWhitespace;
   end;
 
 

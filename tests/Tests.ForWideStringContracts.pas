@@ -29,17 +29,7 @@ implementation
 
   uses
     Deltics.Contracts,
-    Deltics.StringTypes;
-
-
-  const
-    Empty       : WideString = '';
-    Digits      : WideString = '12345';
-    Spaces      : WideString = '  ';
-    CRs         : WideString = #13#13;
-    LFs         : WideString = #10#10;
-    TABs        : WideString = #9#9;
-    Whitespace  : WideString = #9#10#13 + ' ';
+    TestConsts;
 
 
 
@@ -47,7 +37,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmpty;
+    Contract.Requires('test', WideDigits).IsNotEmpty;
   end;
 
 
@@ -55,7 +45,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Empty).IsNotEmpty;
+    Contract.Requires('test', WideEmpty).IsNotEmpty;
   end;
 
 
@@ -65,7 +55,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmpty.GetLength(len);
+    Contract.Requires('test', WideDigits).IsNotEmpty.GetLength(len);
 
     Test('GetActualLength').Assert(len).Equals(5);
   end;
@@ -75,7 +65,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideDigits).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -85,7 +75,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', Digits).IsNotEmptyOrWhitespace.GetLength(len);
+    Contract.Requires('test', WideDigits).IsNotEmptyOrWhitespace.GetLength(len);
 
     Test('GetActualLen').Assert(len).Equals(5);
   end;
@@ -95,7 +85,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Empty).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideEmpty).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -103,7 +93,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', CRs).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideCRs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -111,7 +101,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', LFs).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideLFs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -119,7 +109,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Spaces).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideSpaces).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -127,7 +117,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', TABs).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideTABs).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -135,7 +125,7 @@ implementation
   begin
     Test.Raises(EArgumentException);
 
-    Require('test', Whitespace).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideWhitespace).IsNotEmptyOrWhitespace;
   end;
 
 
