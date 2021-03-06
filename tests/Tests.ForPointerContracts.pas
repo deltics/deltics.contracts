@@ -37,7 +37,7 @@ implementation
 
   procedure PointerContractsTests.IsAssignedRaisesExceptionWhenValueIsNIL;
   begin
-    Test.RaisesException(EArgumentException);
+    Test.Raises(EArgumentException);
 
     Require('test', NIL).IsAssigned;
   end;
