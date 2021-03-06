@@ -6,13 +6,10 @@
 
 interface
 
-// Only UNICODE compilers need to distinguish between String and AnsiString.
-//  For non-UNICODE compilers, String == AnsiString.
-
-{$ifdef UNICODE}
 uses
     Deltics.Contracts.Base,
-    Deltics.Contracts.Interfaces;
+    Deltics.Contracts.Interfaces,
+    Deltics.StringTypes;
 
 
   type
@@ -27,18 +24,16 @@ uses
       function IsNotEmpty: IProvidesLength;
       function IsNotEmptyOrWhitespace: IProvidesLength;
     end;
-{$endif}
 
 
 
 implementation
 
-{$ifdef UNICODE}
   uses
     Windows;
 
 
-  function AnsiStringToString(const aValue: AnsiString): String;
+  function AnsiStringToUnicode(const aValue: AnsiString): UnicodeString;
   var
     len: Integer;
   begin
@@ -65,7 +60,7 @@ implementation
     inherited Create;
 
     fValue        := aValue;
-    ValueAsString := AnsiStringToString(aValue);
+    ValueAsString := {$ifdef UNICODE} AnsiStringToUnicode(aValue) {$else} aValue {$endif};
   end;
 
 
@@ -75,7 +70,7 @@ implementation
     inherited Create(aArgument);
 
     fValue        := aValue;
-    ValueAsString := AnsiStringToString(aValue);
+    ValueAsString := {$ifdef UNICODE} AnsiStringToUnicode(aValue) {$else} aValue {$endif};
   end;
 
 
@@ -124,7 +119,6 @@ implementation
 
     result := self;
   end;
-{$endif}
 
 
 

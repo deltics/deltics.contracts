@@ -47,7 +47,8 @@ interface
 
   uses
     Deltics.Exceptions,
-    Deltics.Contracts.Interfaces;
+    Deltics.Contracts.Interfaces,
+    Deltics.StringTypes;
 
 
   type
@@ -55,15 +56,20 @@ interface
 
 
   procedure Require(const aArgument: String; aIsValid: Boolean); overload;
+
   function Require(const aArgument: String; aValue: AnsiChar): CharContracts; overload;
   function Require(const aArgument: String; aValue: WideChar): WideCharContracts; overload;
   function Require(const aArgument: String; aValue: Integer): IntegerContracts; overload;
   function Require(const aArgument: String; aValue: Pointer): PointerContracts; overload;
-  function Require(const aArgument: String; const aValue: String): StringContracts; overload;
-  function Require(const aArgument: String; const aValue: WideString): StringContracts; overload;
+  function Require(const aArgument: String; const aValue: AnsiString): StringContracts; overload;
+  function Require(const aArgument: String; const aValue: UnicodeString): StringContracts; overload;
+  function RequireUtf8(const aArgument: String; aValue: Utf8Char): Utf8CharContracts; overload;
+  function RequireUtf8(const aArgument: String; const aValue: Utf8String): StringContracts; overload;
 
 {$ifdef UNICODE}
-  function Require(const aArgument: String; const aValue: AnsiString): StringContracts; overload;
+  function Require(const aArgument: String; aValue: Utf8Char): Utf8CharContracts; overload;
+  function Require(const aArgument: String; const aValue: Utf8String): StringContracts; overload;
+  function Require(const aArgument: String; const aValue: WideString): StringContracts; overload;
 {$endif}
 
 
@@ -75,10 +81,9 @@ implementation
     Deltics.Contracts.ForChars,
     Deltics.Contracts.ForIntegers,
     Deltics.Contracts.ForPointers,
-    Deltics.Contracts.ForStrings,
-  {$ifdef UNICODE}
     Deltics.Contracts.ForAnsiStrings,
-  {$endif}
+    Deltics.Contracts.ForUnicodeStrings,
+    Deltics.Contracts.ForUtf8Strings,
     Deltics.Contracts.ForWideStrings;
 
 
@@ -114,22 +119,50 @@ implementation
   end;
 
 
-  function Require(const aArgument: String; const aValue: String): StringContracts;
+  function Require(const aArgument: String; const aValue: AnsiString): StringContracts;
   begin
-    result := StringContractsImpl.Create(aArgument, aValue);
+    result := AnsiStringContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  function Require(const aArgument: String; const aValue: WideString): StringContracts;
+  function Require(const aArgument: String; const aValue: UnicodeString): StringContracts;
   begin
+  {$ifdef UNICODE}
+    result := UnicodeStringContractsImpl.Create(aArgument, aValue);
+  {$else}
     result := WideStringContractsImpl.Create(aArgument, aValue);
+  {$endif}
+  end;
+
+
+  function RequireUtf8(const aArgument: String; aValue: Utf8Char): Utf8CharContracts; overload;
+  begin
+    result := Utf8CharContractsImpl.Create(aArgument, aValue);
+  end;
+
+
+  function RequireUtf8(const aArgument: String; const aValue: Utf8String): StringContracts;
+  begin
+    result := Utf8StringContractsImpl.Create(aArgument, aValue);
   end;
 
 
 {$ifdef UNICODE}
-  function Require(const aArgument: String; const aValue: AnsiString): StringContracts;
+  function Require(const aArgument: String; aValue: Utf8Char): Utf8CharContracts; overload;
   begin
-    result := AnsiStringContractsImpl.Create(aArgument, aValue);
+    result := Utf8CharContractsImpl.Create(aArgument, aValue);
+  end;
+
+
+  function Require(const aArgument: String; const aValue: Utf8String): StringContracts; overload;
+  begin
+    result := Utf8StringContractsImpl.Create(aArgument, aValue);
+  end;
+
+
+  function Require(const aArgument: String; const aValue: WideString): StringContracts; overload;
+  begin
+    result := WideStringContractsImpl.Create(aArgument, aValue);
   end;
 {$endif}
 
