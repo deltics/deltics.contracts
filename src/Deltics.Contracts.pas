@@ -55,23 +55,24 @@ interface
     EArgumentException = Deltics.Exceptions.EArgumentException;
 
 
-  procedure Require(const aArgument: String; aIsValid: Boolean); overload;
+    Contract = class
+    public
+      class procedure Requires(const aArgument: String; aIsValid: Boolean); overload;
 
-  function Require(const aArgument: String; aValue: AnsiChar): CharContracts; overload;
-  function Require(const aArgument: String; aValue: WideChar): WideCharContracts; overload;
-  function Require(const aArgument: String; aValue: Integer): IntegerContracts; overload;
-  function Require(const aArgument: String; aValue: Pointer): PointerContracts; overload;
-  function Require(const aArgument: String; const aValue: AnsiString): StringContracts; overload;
-  function Require(const aArgument: String; const aValue: UnicodeString): StringContracts; overload;
-  function RequireUtf8(const aArgument: String; aValue: Utf8Char): Utf8CharContracts; overload;
-  function RequireUtf8(const aArgument: String; const aValue: Utf8String): StringContracts; overload;
-
-{$ifdef UNICODE}
-  function Require(const aArgument: String; aValue: Utf8Char): Utf8CharContracts; overload;
-  function Require(const aArgument: String; const aValue: Utf8String): StringContracts; overload;
-  function Require(const aArgument: String; const aValue: WideString): StringContracts; overload;
-{$endif}
-
+      class function Requires(const aArgument: String; aValue: AnsiChar): CharContracts; overload;
+      class function Requires(const aArgument: String; aValue: WideChar): WideCharContracts; overload;
+      class function Requires(const aArgument: String; aValue: Integer): IntegerContracts; overload;
+      class function Requires(const aArgument: String; aValue: Pointer): PointerContracts; overload;
+      class function Requires(const aArgument: String; const aValue: AnsiString): StringContracts; overload;
+      class function Requires(const aArgument: String; const aValue: UnicodeString): StringContracts; overload;
+    {$ifdef UNICODE}
+      class function Requires(const aArgument: String; aValue: Utf8Char): Utf8CharContracts; overload;
+      class function Requires(const aArgument: String; const aValue: Utf8String): StringContracts; overload;
+      class function Requires(const aArgument: String; const aValue: WideString): StringContracts; overload;
+    {$endif}
+      class function RequiresUtf8(const aArgument: String; aValue: Utf8Char): Utf8CharContracts; overload;
+      class function RequiresUtf8(const aArgument: String; const aValue: Utf8String): StringContracts; overload;
+    end;
 
 
 
@@ -88,44 +89,44 @@ implementation
 
 
 
-  procedure Require(const aArgument: String; aIsValid: Boolean); overload;
+  class procedure Contract.Requires(const aArgument: String; aIsValid: Boolean);
   begin
     if NOT aIsValid then
       raise EArgumentException.Create(aArgument + ' is invalid');
   end;
 
 
-  function Require(const aArgument: String; aValue: AnsiChar): CharContracts;
+  class function Contract.Requires(const aArgument: String; aValue: AnsiChar): CharContracts;
   begin
     result := AnsiCharContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  function Require(const aArgument: String; aValue: WideChar): WideCharContracts;
+  class function Contract.Requires(const aArgument: String; aValue: WideChar): WideCharContracts;
   begin
     result := WideCharContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  function Require(const aArgument: String; aValue: Integer): IntegerContracts;
+  class function Contract.Requires(const aArgument: String; aValue: Integer): IntegerContracts;
   begin
     result := IntegerContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  function Require(const aArgument: String; aValue: Pointer): PointerContracts;
+  class function Contract.Requires(const aArgument: String; aValue: Pointer): PointerContracts;
   begin
     result := PointerContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  function Require(const aArgument: String; const aValue: AnsiString): StringContracts;
+  class function Contract.Requires(const aArgument: String; const aValue: AnsiString): StringContracts;
   begin
     result := AnsiStringContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  function Require(const aArgument: String; const aValue: UnicodeString): StringContracts;
+  class function Contract.Requires(const aArgument: String; const aValue: UnicodeString): StringContracts;
   begin
   {$ifdef UNICODE}
     result := UnicodeStringContractsImpl.Create(aArgument, aValue);
@@ -135,36 +136,38 @@ implementation
   end;
 
 
-  function RequireUtf8(const aArgument: String; aValue: Utf8Char): Utf8CharContracts; overload;
-  begin
-    result := Utf8CharContractsImpl.Create(aArgument, aValue);
-  end;
-
-
-  function RequireUtf8(const aArgument: String; const aValue: Utf8String): StringContracts;
-  begin
-    result := Utf8StringContractsImpl.Create(aArgument, aValue);
-  end;
-
-
 {$ifdef UNICODE}
-  function Require(const aArgument: String; aValue: Utf8Char): Utf8CharContracts; overload;
+  class function Contract.Requires(const aArgument: String; aValue: Utf8Char): Utf8CharContracts;
   begin
     result := Utf8CharContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  function Require(const aArgument: String; const aValue: Utf8String): StringContracts; overload;
+  class function Contract.Requires(const aArgument: String; const aValue: Utf8String): StringContracts;
   begin
     result := Utf8StringContractsImpl.Create(aArgument, aValue);
   end;
 
 
-  function Require(const aArgument: String; const aValue: WideString): StringContracts; overload;
+  class function Contract.Requires(const aArgument: String; const aValue: WideString): StringContracts;
   begin
     result := WideStringContractsImpl.Create(aArgument, aValue);
   end;
 {$endif}
+
+
+  class function Contract.RequiresUtf8(const aArgument: String; aValue: Utf8Char): Utf8CharContracts;
+  begin
+    result := Utf8CharContractsImpl.Create(aArgument, aValue);
+  end;
+
+
+  class function Contract.RequiresUtf8(const aArgument: String; const aValue: Utf8String): StringContracts;
+  begin
+    result := Utf8StringContractsImpl.Create(aArgument, aValue);
+  end;
+
+
 
 
 end.
