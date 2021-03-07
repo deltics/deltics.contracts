@@ -48,7 +48,7 @@ implementation
     Dec(len);
     SetLength(result, len);
 
-    MultiByteToWideChar(CP_ACP, 0, PAnsiChar(aValue), -1, @result[1], len);
+    MultiByteToWideChar(CP_ACP, 0, PAnsiChar(aValue), -1, PWideChar(result), len);
   end;
 
 

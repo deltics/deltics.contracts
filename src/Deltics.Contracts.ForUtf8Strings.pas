@@ -39,14 +39,14 @@ implementation
   begin
     result := '';
 
-    len := MultiByteToWideChar(CP_UTF8, 0, PAnsiChar(@aValue), 1, NIL, 0);
+    len := MultiByteToWideChar(CP_UTF8, 0, PAnsiChar(aValue), 1, NIL, 0);
 
     // With max len = -1 then the reported length INCLUDES the null terminator
     //  which is automatically part of result
     Dec(len);
     SetLength(result, len);
 
-    MultiByteToWideChar(CP_UTF8, 0, PAnsiChar(@aValue), 1, @result[1], len);
+    MultiByteToWideChar(CP_UTF8, 0, PAnsiChar(aValue), 1, PWideChar(result), len);
   end;
 
 
@@ -56,14 +56,14 @@ implementation
   begin
     result := '';
 
-    len := WideCharToMultiByte(CP_ACP, 0, @aValue, 1, NIL, 0, NIL, NIL);
+    len := WideCharToMultiByte(CP_ACP, 0, PWideChar(aValue), 1, NIL, 0, NIL, NIL);
 
     // With max len = -1 then the reported length INCLUDES the null terminator
     //  which is automatically part of result
     Dec(len);
     SetLength(result, len);
 
-    WideCharToMultiByte(CP_ACP, 0, @aValue, 1, @result[1], 0, NIL, NIL);
+    WideCharToMultiByte(CP_ACP, 0, PWideChar(aValue), 1, PAnsiChar(result), 0, NIL, NIL);
   end;
 
 
