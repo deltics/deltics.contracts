@@ -1,24 +1,25 @@
 
 {$i deltics.contracts.inc}
 
-  unit Deltics.Contracts.ForStrings;
+  unit Deltics.Contracts.ForUnicodeStrings;
 
 
 interface
 
   uses
     Deltics.Contracts.Base,
-    Deltics.Contracts.Interfaces;
+    Deltics.Contracts.Interfaces,
+    Deltics.StringTypes;
 
 
   type
-    StringContractsImpl = class(ContractsImpl, StringContracts,
-                                               IProvidesLength)
+    UnicodeStringContractsImpl = class(ContractsImpl, StringContracts,
+                                                      IProvidesLength)
     private
-      fValue: String;
+      fValue: UnicodeString;
     public
-      constructor Create(const aValue: String); overload;
-      constructor Create(const aArgument: String; const aValue: String); overload;
+      constructor Create(const aValue: UnicodeString); overload;
+      constructor Create(const aArgument: String; const aValue: UnicodeString); overload;
       procedure GetLength(out aVar: Integer);
       function IsNotEmpty: IProvidesLength;
       function IsNotEmptyOrWhitespace: IProvidesLength;
@@ -28,9 +29,9 @@ interface
 
 implementation
 
-{ StringContractsImpl }
+{ UnicodeStringContractsImpl }
 
-  constructor StringContractsImpl.Create(const aValue: String);
+  constructor UnicodeStringContractsImpl.Create(const aValue: UnicodeString);
   begin
     inherited Create;
 
@@ -39,8 +40,8 @@ implementation
   end;
 
 
-  constructor StringContractsImpl.Create(const aArgument: String;
-                                         const aValue: String);
+  constructor UnicodeStringContractsImpl.Create(const aArgument: String;
+                                                const aValue: UnicodeString);
   begin
     inherited Create(aArgument);
 
@@ -49,13 +50,13 @@ implementation
   end;
 
 
-  procedure StringContractsImpl.GetLength(out aVar: Integer);
+  procedure UnicodeStringContractsImpl.GetLength(out aVar: Integer);
   begin
     aVar := Length(fValue);
   end;
 
 
-  function StringContractsImpl.IsNotEmpty: IProvidesLength;
+  function UnicodeStringContractsImpl.IsNotEmpty: IProvidesLength;
   begin
     if Length(fValue) = 0 then
       RaiseException('{argument} cannot be an empty string');
@@ -64,7 +65,7 @@ implementation
   end;
 
 
-  function StringContractsImpl.IsNotEmptyOrWhitespace: IProvidesLength;
+  function UnicodeStringContractsImpl.IsNotEmptyOrWhitespace: IProvidesLength;
 
     function IsWhitespace: Boolean;
     const

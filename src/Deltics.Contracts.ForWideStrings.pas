@@ -17,8 +17,8 @@ interface
     private
       fValue: String;
     public
-      constructor Create(const aValue: String); overload;
-      constructor Create(const aArgument: String; const aValue: String); overload;
+      constructor Create(const aValue: WideString); overload;
+      constructor Create(const aArgument: String; const aValue: WideString); overload;
       procedure GetLength(out aVar: Integer);
       function IsNotEmpty: IProvidesLength;
       function IsNotEmptyOrWhitespace: IProvidesLength;
@@ -28,24 +28,49 @@ interface
 
 implementation
 
+  uses
+    Windows;
+
+
+
+  function WideStringToAnsi(const aValue: WideString): AnsiString;
+  var
+    len: Integer;
+  begin
+    result := '';
+    if Length(aValue) = 0 then
+      EXIT;
+
+    len := WideCharToMultiByte(CP_ACP, 0, PWideChar(aValue), -1, NIL, 0, NIL, NIL);
+
+    // With max len = -1 then the reported length INCLUDES the null terminator
+    //  which is automatically part of result
+    Dec(len);
+    SetLength(result, len);
+
+    WideCharToMultiByte(CP_ACP, 0, PWideChar(aValue), -1, @result, 0, NIL, NIL);
+  end;
+
+
+
 { WideStringContractsImpl }
 
-  constructor WideStringContractsImpl.Create(const aValue: String);
+  constructor WideStringContractsImpl.Create(const aValue: WideString);
   begin
     inherited Create;
 
     fValue        := aValue;
-    ValueAsString := aValue;
+    ValueAsString := {$ifdef UNICODE} aValue {$else} WideStringToAnsi(aValue) {$endif};
   end;
 
 
   constructor WideStringContractsImpl.Create(const aArgument: String;
-                                             const aValue: String);
+                                             const aValue: WideString);
   begin
     inherited Create(aArgument);
 
     fValue        := aValue;
-    ValueAsString := aValue;
+    ValueAsString := {$ifdef UNICODE} aValue {$else} WideStringToAnsi(aValue) {$endif};
   end;
 
 

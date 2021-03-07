@@ -31,15 +31,15 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', @self).IsAssigned;
+    Contract.Requires('test', @self).IsAssigned;
   end;
 
 
   procedure PointerContractsTests.IsAssignedRaisesExceptionWhenValueIsNIL;
   begin
-    Test.RaisesException(EArgumentException);
+    Test.Raises(EArgumentException);
 
-    Require('test', NIL).IsAssigned;
+    Contract.Requires('test', NIL).IsAssigned;
   end;
 
 

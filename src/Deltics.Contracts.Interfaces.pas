@@ -6,6 +6,9 @@
 
 interface
 
+  uses
+    Deltics.StringTypes;
+
   type
     IntegerContracts = interface;
     StringContracts = interface;
@@ -15,6 +18,13 @@ interface
 
     CharContracts = interface
       procedure IsNotNull;
+    end;
+
+
+    Utf8CharContracts = interface(CharContracts)
+      procedure IsAscii;
+      procedure IsLeadByte;
+      procedure IsNotContinuation;
     end;
 
 
@@ -32,11 +42,13 @@ interface
       procedure IsNotLessThan(aValue: Integer);
       procedure IsPositiveOrZero;
 
-      function IsValidIndexForString(const aString: String): IProvidesLength; overload;
+      function IsValidIndexFor(const aString: AnsiString): IProvidesLength; overload;
+      function IsValidIndexFor(const aString: UnicodeString): IProvidesLength; overload;
     {$ifdef UNICODE}
-      function IsValidIndexForString(const aString: AnsiString): IProvidesLength; overload;
+      function IsValidIndexFor(const aString: Utf8String): IProvidesLength; overload;
+      function IsValidIndexFor(const aString: WideString): IProvidesLength; overload;
     {$endif}
-      function IsValidIndexForString(const aString: WideString): IProvidesLength; overload;
+      function IsValidIndexForUtf8(const aString: Utf8String): IProvidesLength; overload;
     end;
 
 

@@ -8,7 +8,8 @@ interface
 
   uses
     Deltics.Contracts.Base,
-    Deltics.Contracts.Interfaces;
+    Deltics.Contracts.Interfaces,
+    Deltics.StringTypes;
 
 
   type
@@ -24,11 +25,13 @@ interface
       procedure IsNotGreaterThan(aValue: Integer);
       procedure IsNotLessThan(aValue: Integer);
       procedure IsPositiveOrZero;
-      function IsValidIndexForString(const aString: String): IProvidesLength; overload;
+      function IsValidIndexFor(const aString: AnsiString): IProvidesLength; overload;
+      function IsValidIndexFor(const aString: UnicodeString): IProvidesLength; overload;
     {$ifdef UNICODE}
-      function IsValidIndexForString(const aString: AnsiString): IProvidesLength; overload;
+      function IsValidIndexFor(const aString: Utf8String): IProvidesLength; overload;
+      function IsValidIndexFor(const aString: WideString): IProvidesLength; overload;
     {$endif}
-      function IsValidIndexForString(const aString: WideString): IProvidesLength; overload;
+      function IsValidIndexForUtf8(const aString: Utf8String): IProvidesLength;
     end;
 
 
@@ -38,8 +41,9 @@ implementation
 
   uses
     SysUtils,
-    Deltics.Contracts.ForStrings,
     Deltics.Contracts.ForAnsiStrings,
+    Deltics.Contracts.ForUnicodeStrings,
+    Deltics.Contracts.ForUtf8Strings,
     Deltics.Contracts.ForWideStrings;
 
 
@@ -106,32 +110,50 @@ implementation
   end;
 
 
-  function IntegerContractsImpl.IsValidIndexForString(const aString: String): IProvidesLength;
-  begin
-    if (fValue <= 0) or (fValue > Length(aString)) then
-      RaiseException('{argument} is not a valid index ({value}) for string ({required})', '1..' + IntToStr(Length(aString)));
-
-    result := StringContractsImpl.Create(aString);
-  end;
-
-
-{$ifdef UNICODE}
-  function IntegerContractsImpl.IsValidIndexForString(const aString: AnsiString): IProvidesLength;
+  function IntegerContractsImpl.IsValidIndexFor(const aString: AnsiString): IProvidesLength;
   begin
     if (fValue <= 0) or (fValue > Length(aString)) then
       RaiseException('{argument} is not a valid index ({value}) for string ({required})', '1..' + IntToStr(Length(aString)));
 
     result := AnsiStringContractsImpl.Create(aString);
   end;
-{$endif}
 
 
-  function IntegerContractsImpl.IsValidIndexForString(const aString: WideString): IProvidesLength;
+  function IntegerContractsImpl.IsValidIndexFor(const aString: UnicodeString): IProvidesLength;
+  begin
+    if (fValue <= 0) or (fValue > Length(aString)) then
+      RaiseException('{argument} is not a valid index ({value}) for string ({required})', '1..' + IntToStr(Length(aString)));
+
+    result := UnicodeStringContractsImpl.Create(aString);
+  end;
+
+
+{$ifdef UNICODE}
+  function IntegerContractsImpl.IsValidIndexFor(const aString: Utf8String): IProvidesLength;
+  begin
+    if (fValue <= 0) or (fValue > Length(aString)) then
+      RaiseException('{argument} is not a valid index ({value}) for string ({required})', '1..' + IntToStr(Length(aString)));
+
+    result := Utf8StringContractsImpl.Create(aString);
+  end;
+
+
+  function IntegerContractsImpl.IsValidIndexFor(const aString: WideString): IProvidesLength;
   begin
     if (fValue <= 0) or (fValue > Length(aString)) then
       RaiseException('{argument} is not a valid index ({value}) for string ({required})', '1..' + IntToStr(Length(aString)));
 
     result := WideStringContractsImpl.Create(aString);
+  end;
+{$endif}
+
+
+  function IntegerContractsImpl.IsValidIndexForUtf8(const aString: Utf8String): IProvidesLength;
+  begin
+    if (fValue <= 0) or (fValue > Length(aString)) then
+      RaiseException('{argument} is not a valid index ({value}) for string ({required})', '1..' + IntToStr(Length(aString)));
+
+    result := Utf8StringContractsImpl.Create(aString);
   end;
 
 

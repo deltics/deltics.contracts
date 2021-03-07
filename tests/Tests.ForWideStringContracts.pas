@@ -13,37 +13,39 @@ interface
     WideStringContractsTests = class(TTest)
       procedure WideStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;
       procedure WideStringIsNotEmptyYieldsLengthWhenArgumentIsNotAnEmptyString;
-      procedure WideStringIsNotEmptyRaisesExceptionWhenArgumentIsAnEmptyString;
+      procedure WideStringIsNotEmptyRaisesWhenArgumentIsAnEmptyString;
       procedure WideStringIsNotEmptyOrWhitespaceDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyWhitespaceString;
       procedure WideStringIsNotEmptyOrWhitespaceYieldsLengthWhenArgumentIsNotAnEmptyWhitespaceString;
-      procedure WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentIsAnEmptyString;
-      procedure WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlySpaces;
-      procedure WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyTabs;
-      procedure WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyCarriageReturns;
-      procedure WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyLineFeeds;
-      procedure WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyWhitespace;
+      procedure WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentIsAnEmptyString;
+      procedure WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlySpaces;
+      procedure WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlyTabs;
+      procedure WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlyCarriageReturns;
+      procedure WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlyLineFeeds;
+      procedure WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlyWhitespace;
     end;
 
 
 implementation
 
   uses
-    Deltics.Contracts;
+    Deltics.Contracts,
+    TestConsts;
+
 
 
   procedure WideStringContractsTests.WideStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;
   begin
     Test.RaisesNoException;
 
-    Require('test', '12345').IsNotEmpty;
+    Contract.Requires('test', WideDigits).IsNotEmpty;
   end;
 
 
-  procedure WideStringContractsTests.WideStringIsNotEmptyRaisesExceptionWhenArgumentIsAnEmptyString;
+  procedure WideStringContractsTests.WideStringIsNotEmptyRaisesWhenArgumentIsAnEmptyString;
   begin
-    Test.RaisesException(EArgumentException);
+    Test.Raises(EArgumentException);
 
-    Require('test', '').IsNotEmpty;
+    Contract.Requires('test', WideEmpty).IsNotEmpty;
   end;
 
 
@@ -53,7 +55,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', '12345').IsNotEmpty.GetLength(len);
+    Contract.Requires('test', WideDigits).IsNotEmpty.GetLength(len);
 
     Test('GetActualLength').Assert(len).Equals(5);
   end;
@@ -63,7 +65,7 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', '12345').IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideDigits).IsNotEmptyOrWhitespace;
   end;
 
 
@@ -73,57 +75,57 @@ implementation
   begin
     Test.RaisesNoException;
 
-    Require('test', '12345').IsNotEmptyOrWhitespace.GetLength(len);
+    Contract.Requires('test', WideDigits).IsNotEmptyOrWhitespace.GetLength(len);
 
     Test('GetActualLen').Assert(len).Equals(5);
   end;
 
 
-  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentIsAnEmptyString;
+  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentIsAnEmptyString;
   begin
-    Test.RaisesException(EArgumentException);
+    Test.Raises(EArgumentException);
 
-    Require('test', '').IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideEmpty).IsNotEmptyOrWhitespace;
   end;
 
 
-  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyCarriageReturns;
+  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlyCarriageReturns;
   begin
-    Test.RaisesException(EArgumentException);
+    Test.Raises(EArgumentException);
 
-    Require('test', #13#13).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideCRs).IsNotEmptyOrWhitespace;
   end;
 
 
-  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyLineFeeds;
+  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlyLineFeeds;
   begin
-    Test.RaisesException(EArgumentException);
+    Test.Raises(EArgumentException);
 
-    Require('test', #10#10).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideLFs).IsNotEmptyOrWhitespace;
   end;
 
 
-  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlySpaces;
+  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlySpaces;
   begin
-    Test.RaisesException(EArgumentException);
+    Test.Raises(EArgumentException);
 
-    Require('', '  ').IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideSpaces).IsNotEmptyOrWhitespace;
   end;
 
 
-  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyTabs;
+  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlyTabs;
   begin
-    Test.RaisesException(EArgumentException);
+    Test.Raises(EArgumentException);
 
-    Require('test', #9#9).IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideTABs).IsNotEmptyOrWhitespace;
   end;
 
 
-  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesExceptionWhenArgumentContainsOnlyWhitespace;
+  procedure WideStringContractsTests.WideStringIsNotEmptyOrWhitespaceRaisesWhenArgumentContainsOnlyWhitespace;
   begin
-    Test.RaisesException(EArgumentException);
+    Test.Raises(EArgumentException);
 
-    Require('test', #9#10#13 + ' ').IsNotEmptyOrWhitespace;
+    Contract.Requires('test', WideWhitespace).IsNotEmptyOrWhitespace;
   end;
 
 

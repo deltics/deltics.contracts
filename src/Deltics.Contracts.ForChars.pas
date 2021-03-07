@@ -7,6 +7,7 @@
 interface
 
   uses
+    Deltics.StringTypes,
     Deltics.Contracts.Base,
     Deltics.Contracts.Interfaces;
 
@@ -17,6 +18,18 @@ interface
       fValue: AnsiChar;
     public
       constructor Create(const aArgument: String; const aValue: AnsiChar);
+      procedure IsNotNull;
+    end;
+
+
+    Utf8CharContractsImpl = class(ContractsImpl, Utf8CharContracts)
+    private
+      fValue: Utf8Char;
+    public
+      constructor Create(const aArgument: String; const aValue: Utf8Char);
+      procedure IsAscii;
+      procedure IsLeadByte;
+      procedure IsNotContinuation;
       procedure IsNotNull;
     end;
 
@@ -64,7 +77,7 @@ implementation
   end;
 
 
-  function AnsiCharToString(const aValue: AnsiChar): String;
+  function AnsiCharToUnicode(const aValue: AnsiChar): UnicodeString;
   var
     len: Integer;
   begin
@@ -92,7 +105,7 @@ implementation
     inherited Create(aArgument);
 
     fValue        := aValue;
-    ValueAsString := {$ifdef UNICODE} AnsiCharToString(aValue) {$else} aValue {$endif};
+    ValueAsString := {$ifdef UNICODE} AnsiCharToUnicode(aValue) {$else} aValue {$endif};
   end;
 
 
@@ -136,6 +149,48 @@ implementation
       RaiseException('{argument} must be a surrogate char');
   end;
 
+
+
+
+{ Utf8CharContractsImpl }
+
+  constructor Utf8CharContractsImpl.Create(const aArgument: String;
+                                           const aValue: Utf8Char);
+  begin
+    inherited Create(aArgument);
+
+    fValue := aValue;
+  end;
+
+
+  procedure Utf8CharContractsImpl.IsAscii;
+  begin
+    if (Byte(fValue) and $80) = $00 then
+      RaiseException('{argument} must be an Ascii char (not a lead byte)');
+  end;
+
+
+  procedure Utf8CharContractsImpl.IsLeadByte;
+  begin
+    if  ((Byte(fValue) and $e0) = $c0)
+     or ((Byte(fValue) and $f0) = $e0)
+     or ((Byte(fValue) and $f8) = $f0) then
+      RaiseException('{argument} must be a lead byte (not Ascii and not a continuation byte)');
+  end;
+
+
+  procedure Utf8CharContractsImpl.IsNotNull;
+  begin
+    if Ord(fValue) = 0 then
+      RaiseException('{argument} cannot be null char');
+  end;
+
+
+  procedure Utf8CharContractsImpl.IsNotContinuation;
+  begin
+    if (Byte(fValue) and $c0) <> $80 then
+      RaiseException('{argument} cannot be a continuation byte');
+  end;
 
 
 
