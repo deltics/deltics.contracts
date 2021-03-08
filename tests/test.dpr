@@ -18,6 +18,7 @@ uses
   TestConsts in 'TestConsts.pas',
   Tests.ForIntegerContracts in 'Tests.ForIntegerContracts.pas',
   Tests.ForPointerContracts in 'Tests.ForPointerContracts.pas',
+  Tests.ForCharContracts in 'Tests.ForCharContracts.pas',
   Tests.ForAnsiStringContracts in 'Tests.ForAnsiStringContracts.pas',
   Tests.ForUnicodeStringContracts in 'Tests.ForUnicodeStringContracts.pas',
   Tests.ForUtf8StringContracts in 'Tests.ForUtf8StringContracts.pas',
@@ -26,6 +27,7 @@ uses
 begin
   TestRun.Test(IntegerContractsTests);
   TestRun.Test(PointerContractsTests);
+  TestRun.Test(CharContractTests);
   TestRun.Test(AnsiStringContractsTests);
   TestRun.Test(UnicodeStringContractsTests);
   TestRun.Test(Utf8StringContractsTests);

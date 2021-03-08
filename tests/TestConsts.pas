@@ -8,6 +8,17 @@ interface
 
 
   const
+    AnsiCapitalA      : AnsiChar  = 'A';
+    Utf8CapitalA      : Utf8Char  = 'A';
+    WideCapitalA      : WideChar  = 'A';
+
+    AnsiCopyright     : AnsiChar  = '©';
+    WideCopyright     : WideChar  = '©';
+
+    // Copyright symbol in Utf8 requires a continuation byte and so
+    //  is represented by a 'string' rather than a single Utf8Char
+    Utf8Copyright     : Utf8String = #$c2#$a9;
+
     AnsiEmpty         : AnsiString = '';
     AnsiDigits        : AnsiString = '12345';
     AnsiSpaces        : AnsiString = '  ';
@@ -40,9 +51,15 @@ interface
     WideTABs          : WideString = #9#9;
     WideWhitespace    : WideString = #9#10#13 + ' ';
 
-
+  // Treble Clef char is a surrogate pair in Utf16
+  var
+    WideTrebleClef    : WideString;
 
 
 implementation
 
+initialization
+  SetLength(WideTrebleClef, 2);
+  WideTrebleClef[1] := WideChar($D834);
+  WideTrebleClef[2] := WideChar($DD1E);
 end.
