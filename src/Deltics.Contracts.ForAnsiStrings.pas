@@ -21,8 +21,12 @@ uses
       constructor Create(const aValue: AnsiString); overload;
       constructor Create(const aArgument: String; const aValue: AnsiString); overload;
       procedure GetLength(out aVar: Integer);
+      function IsLongerThan(const aLength: Integer): IProvidesLength; overload;
+      function IsLongerThan(const aOtherArgument: String; const aLength: Integer): IProvidesLength; overload;
       function IsNotEmpty: IProvidesLength;
       function IsNotEmptyOrWhitespace: IProvidesLength;
+      function IsNotLongerThan(const aLength: Integer): IProvidesLength; overload;
+      function IsNotLongerThan(const aOtherArgument: String; const aLength: Integer): IProvidesLength; overload;
     end;
 
 
@@ -30,6 +34,7 @@ uses
 implementation
 
   uses
+    SysUtils,
     Windows;
 
 
@@ -48,7 +53,7 @@ implementation
     Dec(len);
     SetLength(result, len);
 
-    MultiByteToWideChar(CP_ACP, 0, PAnsiChar(aValue), -1, @result[1], len);
+    MultiByteToWideChar(CP_ACP, 0, PAnsiChar(aValue), -1, PWideChar(result), len);
   end;
 
 
@@ -77,6 +82,25 @@ implementation
   procedure AnsiStringContractsImpl.GetLength(out aVar: Integer);
   begin
     aVar := Length(fValue);
+  end;
+
+
+  function AnsiStringContractsImpl.IsLongerThan(const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) <= aLength then
+      RaiseException('{argument} must be longer than {required}', IntToStr(aLength));
+
+    result := self;
+  end;
+
+
+  function AnsiStringContractsImpl.IsLongerThan(const aOtherArgument: String;
+                                                const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) <= aLength then
+      RaiseException('{argument} must be longer than {required}', aOtherArgument);
+
+    result := self;
   end;
 
 
@@ -119,6 +143,27 @@ implementation
 
     result := self;
   end;
+
+
+
+  function AnsiStringContractsImpl.IsNotLongerThan(const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) > aLength then
+      RaiseException('Length of {argument} is greater than {required}', IntToStr(aLength));
+
+    result := self;
+  end;
+
+
+  function AnsiStringContractsImpl.IsNotLongerThan(const aOtherArgument: String;
+                                                   const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) > aLength then
+      RaiseException('{argument} is longer than {required}', aOtherArgument);
+
+    result := self;
+  end;
+
 
 
 

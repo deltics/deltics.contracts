@@ -17,12 +17,16 @@ interface
 
 
     CharContracts = interface
+      procedure IsAscii; overload;
       procedure IsNotNull;
     end;
 
 
+    AnsiCharContracts = interface(CharContracts)
+    end;
+
+
     Utf8CharContracts = interface(CharContracts)
-      procedure IsAscii;
       procedure IsLeadByte;
       procedure IsNotContinuation;
     end;
@@ -58,8 +62,12 @@ interface
 
 
     StringContracts = interface
+      function IsLongerThan(const Length: Integer): IProvidesLength; overload;
+      function IsLongerThan(const aOtherArgument: String; const Length: Integer): IProvidesLength; overload;
       function IsNotEmpty: IProvidesLength;
       function IsNotEmptyOrWhitespace: IProvidesLength;
+      function IsNotLongerThan(const Length: Integer): IProvidesLength; overload;
+      function IsNotLongerThan(const aOtherArgument: String; const Length: Integer): IProvidesLength; overload;
     end;
 
 

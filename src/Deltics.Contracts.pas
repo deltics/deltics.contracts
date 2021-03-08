@@ -59,7 +59,7 @@ interface
     public
       class procedure Requires(const aArgument: String; aIsValid: Boolean); overload;
 
-      class function Requires(const aArgument: String; aValue: AnsiChar): CharContracts; overload;
+      class function Requires(const aArgument: String; aValue: AnsiChar): AnsiCharContracts; overload;
       class function Requires(const aArgument: String; aValue: WideChar): WideCharContracts; overload;
       class function Requires(const aArgument: String; aValue: Integer): IntegerContracts; overload;
       class function Requires(const aArgument: String; aValue: Pointer): PointerContracts; overload;
@@ -96,7 +96,7 @@ implementation
   end;
 
 
-  class function Contract.Requires(const aArgument: String; aValue: AnsiChar): CharContracts;
+  class function Contract.Requires(const aArgument: String; aValue: AnsiChar): AnsiCharContracts;
   begin
     result := AnsiCharContractsImpl.Create(aArgument, aValue);
   end;

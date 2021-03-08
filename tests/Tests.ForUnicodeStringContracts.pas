@@ -11,6 +11,11 @@ interface
 
   type
     UnicodeStringContractsTests = class(TTest)
+      procedure IsLongerThanRaisesExceptionWhenArgumentIsSameLength;
+      procedure IsLongerThanRaisesExceptionWhenArgumentIsShorter;
+      procedure IsLongerThanRaisesNoExceptionWhenArgumentIsLonger;
+      procedure IsNotLongerThanRaisesExceptionWhenArgumentIsLonger;
+      procedure IsNotLongerThanRaisesNoExceptionWhenArgumentIsShorterOrEqual;
       procedure UnicodeStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;
       procedure UnicodeStringIsNotEmptyYieldsLengthWhenArgumentIsNotAnEmptyString;
       procedure UnicodeStringIsNotEmptyRaisesWhenArgumentIsAnEmptyString;
@@ -30,6 +35,47 @@ implementation
   uses
     Deltics.Contracts,
     TestConsts;
+
+
+  procedure UnicodeStringContractsTests.IsLongerThanRaisesExceptionWhenArgumentIsSameLength;
+  begin
+    Test.Raises(EArgumentException);
+
+    Contract.Requires('test', UnicodeDigits).IsLongerThan(Length(UnicodeDigits));
+  end;
+
+
+  procedure UnicodeStringContractsTests.IsLongerThanRaisesExceptionWhenArgumentIsShorter;
+  begin
+    Test.Raises(EArgumentException);
+
+    Contract.Requires('test', UnicodeDigits).IsLongerThan(Length(UnicodeDigits) + 1);
+  end;
+
+
+  procedure UnicodeStringContractsTests.IsLongerThanRaisesNoExceptionWhenArgumentIsLonger;
+  begin
+    Test.RaisesNoException;
+
+    Contract.Requires('test', UnicodeDigits).IsLongerThan(Length(UnicodeDigits) - 1);
+  end;
+
+
+  procedure UnicodeStringContractsTests.IsNotLongerThanRaisesExceptionWhenArgumentIsLonger;
+  begin
+    Test.Raises(EArgumentException);
+
+    Contract.Requires('test', UnicodeDigits).IsNotLongerThan(Length(UnicodeDigits) - 1);
+  end;
+
+
+  procedure UnicodeStringContractsTests.IsNotLongerThanRaisesNoExceptionWhenArgumentIsShorterOrEqual;
+  begin
+    Test.RaisesNoException;
+
+    Contract.Requires('test', UnicodeDigits).IsNotLongerThan(Length(UnicodeDigits) + 1);
+    Contract.Requires('test', UnicodeDigits).IsNotLongerThan(Length(UnicodeDigits));
+  end;
 
 
   procedure UnicodeStringContractsTests.UnicodeStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;

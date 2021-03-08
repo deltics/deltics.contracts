@@ -11,6 +11,11 @@ interface
 
   type
     AnsiStringContractsTests = class(TTest)
+      procedure IsLongerThanRaisesExceptionWhenArgumentIsSameLength;
+      procedure IsLongerThanRaisesExceptionWhenArgumentIsShorter;
+      procedure IsLongerThanRaisesNoExceptionWhenArgumentIsLonger;
+      procedure IsNotLongerThanRaisesExceptionWhenArgumentIsLonger;
+      procedure IsNotLongerThanRaisesNoExceptionWhenArgumentIsShorterOrEqual;
       procedure AnsiStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnAnsiEmptyString;
       procedure AnsiStringIsNotEmptyYieldsLengthWhenArgumentIsNotAnAnsiEmptyString;
       procedure AnsiStringIsNotEmptyRaisesWhenArgumentIsAnAnsiEmptyString;
@@ -32,6 +37,47 @@ implementation
     Deltics.Contracts,
     TestConsts;
 
+
+
+  procedure AnsiStringContractsTests.IsLongerThanRaisesExceptionWhenArgumentIsSameLength;
+  begin
+    Test.Raises(EArgumentException);
+
+    Contract.Requires('test', AnsiDigits).IsLongerThan(Length(AnsiDigits));
+  end;
+
+
+  procedure AnsiStringContractsTests.IsLongerThanRaisesExceptionWhenArgumentIsShorter;
+  begin
+    Test.Raises(EArgumentException);
+
+    Contract.Requires('test', AnsiDigits).IsLongerThan(Length(AnsiDigits) + 1);
+  end;
+
+
+  procedure AnsiStringContractsTests.IsLongerThanRaisesNoExceptionWhenArgumentIsLonger;
+  begin
+    Test.RaisesNoException;
+
+    Contract.Requires('test', AnsiDigits).IsLongerThan(Length(AnsiDigits) - 1);
+  end;
+
+
+  procedure AnsiStringContractsTests.IsNotLongerThanRaisesExceptionWhenArgumentIsLonger;
+  begin
+    Test.Raises(EArgumentException);
+
+    Contract.Requires('test', AnsiDigits).IsNotLongerThan(Length(AnsiDigits) - 1);
+  end;
+
+
+  procedure AnsiStringContractsTests.IsNotLongerThanRaisesNoExceptionWhenArgumentIsShorterOrEqual;
+  begin
+    Test.RaisesNoException;
+
+    Contract.Requires('test', AnsiDigits).IsNotLongerThan(Length(AnsiDigits) + 1);
+    Contract.Requires('test', AnsiDigits).IsNotLongerThan(Length(AnsiDigits));
+  end;
 
 
   procedure AnsiStringContractsTests.AnsiStringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnAnsiEmptyString;

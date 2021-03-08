@@ -21,8 +21,12 @@ interface
       constructor Create(const aValue: Utf8String); overload;
       constructor Create(const aArgument: String; const aValue: Utf8String); overload;
       procedure GetLength(out aVar: Integer);
+      function IsLongerThan(const aLength: Integer): IProvidesLength; overload;
+      function IsLongerThan(const aOtherArgument: String; const aLength: Integer): IProvidesLength; overload;
       function IsNotEmpty: IProvidesLength;
       function IsNotEmptyOrWhitespace: IProvidesLength;
+      function IsNotLongerThan(const aLength: Integer): IProvidesLength; overload;
+      function IsNotLongerThan(const aOtherArgument: String; const aLength: Integer): IProvidesLength; overload;
     end;
 
 
@@ -30,6 +34,7 @@ interface
 implementation
 
   uses
+    SysUtils,
     Windows;
 
 
@@ -39,14 +44,14 @@ implementation
   begin
     result := '';
 
-    len := MultiByteToWideChar(CP_UTF8, 0, @aValue, 1, NIL, 0);
+    len := MultiByteToWideChar(CP_UTF8, 0, PAnsiChar(aValue), 1, NIL, 0);
 
     // With max len = -1 then the reported length INCLUDES the null terminator
     //  which is automatically part of result
     Dec(len);
     SetLength(result, len);
 
-    MultiByteToWideChar(CP_UTF8, 0, @aValue, 1, @result[1], len);
+    MultiByteToWideChar(CP_UTF8, 0, PAnsiChar(aValue), 1, PWideChar(result), len);
   end;
 
 
@@ -56,14 +61,14 @@ implementation
   begin
     result := '';
 
-    len := WideCharToMultiByte(CP_ACP, 0, @aValue, 1, NIL, 0, NIL, NIL);
+    len := WideCharToMultiByte(CP_ACP, 0, PWideChar(aValue), 1, NIL, 0, NIL, NIL);
 
     // With max len = -1 then the reported length INCLUDES the null terminator
     //  which is automatically part of result
     Dec(len);
     SetLength(result, len);
 
-    WideCharToMultiByte(CP_ACP, 0, @aValue, 1, @result[1], 0, NIL, NIL);
+    WideCharToMultiByte(CP_ACP, 0, PWideChar(aValue), 1, PAnsiChar(result), 0, NIL, NIL);
   end;
 
 
@@ -99,6 +104,25 @@ implementation
   procedure Utf8StringContractsImpl.GetLength(out aVar: Integer);
   begin
     aVar := Length(fValue);
+  end;
+
+
+  function Utf8StringContractsImpl.IsLongerThan(const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) <= aLength then
+      RaiseException('{argument} must be longer than {required}', IntToStr(aLength));
+
+    result := self;
+  end;
+
+
+  function Utf8StringContractsImpl.IsLongerThan(const aOtherArgument: String;
+                                                const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) <= aLength then
+      RaiseException('{argument} must be longer than {required}', aOtherArgument);
+
+    result := self;
   end;
 
 
@@ -141,6 +165,26 @@ implementation
 
     result := self;
   end;
+
+
+  function Utf8StringContractsImpl.IsNotLongerThan(const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) > aLength then
+      RaiseException('Length of {argument} is greater than {required}', IntToStr(aLength));
+
+    result := self;
+  end;
+
+
+  function Utf8StringContractsImpl.IsNotLongerThan(const aOtherArgument: String;
+                                                   const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) > aLength then
+      RaiseException('{argument} is longer than {required}', aOtherArgument);
+
+    result := self;
+  end;
+
 
 
 
