@@ -13,11 +13,12 @@ interface
 
 
   type
-    AnsiCharContractsImpl = class(ContractsImpl, CharContracts)
+    AnsiCharContractsImpl = class(ContractsImpl, AnsiCharContracts)
     private
       fValue: AnsiChar;
     public
       constructor Create(const aArgument: String; const aValue: AnsiChar);
+      procedure IsAscii;
       procedure IsNotNull;
     end;
 
@@ -39,6 +40,7 @@ interface
       fValue: WideChar;
     public
       constructor Create(const aArgument: String; const aValue: WideChar);
+      procedure IsAscii; overload;
       procedure IsNotNull;
       procedure IsNotSurrogate;
       procedure IsSurrogate;
@@ -109,11 +111,62 @@ implementation
   end;
 
 
+  procedure AnsiCharContractsImpl.IsAscii;
+  begin
+    if Ord(fValue) > 127 then
+      RaiseException('{argument} must be ASCII (0..127)');
+  end;
+
+
   procedure AnsiCharContractsImpl.IsNotNull;
   begin
     if Ord(fValue) = 0 then
       RaiseException('{argument} cannot be null char');
   end;
+
+
+
+
+{ Utf8CharContractsImpl }
+
+  constructor Utf8CharContractsImpl.Create(const aArgument: String;
+                                           const aValue: Utf8Char);
+  begin
+    inherited Create(aArgument);
+
+    fValue := aValue;
+  end;
+
+
+  procedure Utf8CharContractsImpl.IsAscii;
+  begin
+    if Ord(fValue) > 127 then
+      RaiseException('{argument} must be Ascii (U+0000..U+007F)');
+  end;
+
+
+  procedure Utf8CharContractsImpl.IsLeadByte;
+  begin
+    if  NOT (((Byte(fValue) and $e0) = $c0)
+         or ((Byte(fValue) and $f0) = $e0)
+         or ((Byte(fValue) and $f8) = $f0)) then
+      RaiseException('{argument} must be a lead byte (not Ascii and not a continuation byte)');
+  end;
+
+
+  procedure Utf8CharContractsImpl.IsNotNull;
+  begin
+    if Ord(fValue) = 0 then
+      RaiseException('{argument} cannot be null char');
+  end;
+
+
+  procedure Utf8CharContractsImpl.IsNotContinuation;
+  begin
+    if (Byte(fValue) and $c0) <> $80 then
+      RaiseException('{argument} cannot be a continuation byte');
+  end;
+
 
 
 
@@ -126,6 +179,13 @@ implementation
 
     fValue        := aValue;
     ValueAsString := aValue;
+  end;
+
+
+  procedure WideCharContractsImpl.IsAscii;
+  begin
+    if Ord(fValue) > 127 then
+      RaiseException('{argument} must be ASCII (U+0000..U+007F)');
   end;
 
 
@@ -152,46 +212,5 @@ implementation
 
 
 
-{ Utf8CharContractsImpl }
-
-  constructor Utf8CharContractsImpl.Create(const aArgument: String;
-                                           const aValue: Utf8Char);
-  begin
-    inherited Create(aArgument);
-
-    fValue := aValue;
-  end;
-
-
-  procedure Utf8CharContractsImpl.IsAscii;
-  begin
-    if (Byte(fValue) and $80) = $00 then
-      RaiseException('{argument} must be an Ascii char (not a lead byte)');
-  end;
-
-
-  procedure Utf8CharContractsImpl.IsLeadByte;
-  begin
-    if  ((Byte(fValue) and $e0) = $c0)
-     or ((Byte(fValue) and $f0) = $e0)
-     or ((Byte(fValue) and $f8) = $f0) then
-      RaiseException('{argument} must be a lead byte (not Ascii and not a continuation byte)');
-  end;
-
-
-  procedure Utf8CharContractsImpl.IsNotNull;
-  begin
-    if Ord(fValue) = 0 then
-      RaiseException('{argument} cannot be null char');
-  end;
-
-
-  procedure Utf8CharContractsImpl.IsNotContinuation;
-  begin
-    if (Byte(fValue) and $c0) <> $80 then
-      RaiseException('{argument} cannot be a continuation byte');
-  end;
-
-
-
 end.
+

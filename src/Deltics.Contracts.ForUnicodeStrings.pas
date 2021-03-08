@@ -21,13 +21,22 @@ interface
       constructor Create(const aValue: UnicodeString); overload;
       constructor Create(const aArgument: String; const aValue: UnicodeString); overload;
       procedure GetLength(out aVar: Integer);
+      function IsLongerThan(const aLength: Integer): IProvidesLength; overload;
+      function IsLongerThan(const aOtherArgument: String; const aLength: Integer): IProvidesLength; overload;
       function IsNotEmpty: IProvidesLength;
       function IsNotEmptyOrWhitespace: IProvidesLength;
+      function IsNotLongerThan(const aLength: Integer): IProvidesLength; overload;
+      function IsNotLongerThan(const aOtherArgument: String; const aLength: Integer): IProvidesLength; overload;
     end;
 
 
 
 implementation
+
+  uses
+    SysUtils;
+
+
 
 { UnicodeStringContractsImpl }
 
@@ -53,6 +62,25 @@ implementation
   procedure UnicodeStringContractsImpl.GetLength(out aVar: Integer);
   begin
     aVar := Length(fValue);
+  end;
+
+
+  function UnicodeStringContractsImpl.IsLongerThan(const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) <= aLength then
+      RaiseException('{argument} must be longer than {required}', IntToStr(aLength));
+
+    result := self;
+  end;
+
+
+  function UnicodeStringContractsImpl.IsLongerThan(const aOtherArgument: String;
+                                                   const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) <= aLength then
+      RaiseException('{argument} must be longer than {required}', aOtherArgument);
+
+    result := self;
   end;
 
 
@@ -92,6 +120,25 @@ implementation
 
     if IsWhitespace then
       RaiseException('{argument} cannot consist entirely of whitespace');
+
+    result := self;
+  end;
+
+
+  function UnicodeStringContractsImpl.IsNotLongerThan(const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) > aLength then
+      RaiseException('Length of {argument} is greater than {required}', IntToStr(aLength));
+
+    result := self;
+  end;
+
+
+  function UnicodeStringContractsImpl.IsNotLongerThan(const aOtherArgument: String;
+                                                      const aLength: Integer): IProvidesLength;
+  begin
+    if Length(fValue) > aLength then
+      RaiseException('{argument} is longer than {required}', aOtherArgument);
 
     result := self;
   end;
