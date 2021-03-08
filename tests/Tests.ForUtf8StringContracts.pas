@@ -11,6 +11,11 @@ interface
 
   type
     Utf8StringContractsTests = class(TTest)
+      procedure IsLongerThanRaisesExceptionWhenArgumentIsSameLength;
+      procedure IsLongerThanRaisesExceptionWhenArgumentIsShorter;
+      procedure IsLongerThanRaisesNoExceptionWhenArgumentIsLonger;
+      procedure IsNotLongerThanRaisesExceptionWhenArgumentIsLonger;
+      procedure IsNotLongerThanRaisesNoExceptionWhenArgumentIsShorterOrEqual;
       procedure Utf8StringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;
       procedure Utf8StringIsNotEmptyYieldsLengthWhenArgumentIsNotAnEmptyString;
       procedure Utf8StringIsNotEmptyRaisesWhenArgumentIsAnEmptyString;
@@ -31,6 +36,47 @@ implementation
     Deltics.Contracts,
     TestConsts;
 
+
+
+  procedure Utf8StringContractsTests.IsLongerThanRaisesExceptionWhenArgumentIsSameLength;
+  begin
+    Test.Raises(EArgumentException);
+
+    Contract.Requires('test', Utf8Digits).IsLongerThan(Length(Utf8Digits));
+  end;
+
+
+  procedure Utf8StringContractsTests.IsLongerThanRaisesExceptionWhenArgumentIsShorter;
+  begin
+    Test.Raises(EArgumentException);
+
+    Contract.Requires('test', Utf8Digits).IsLongerThan(Length(Utf8Digits) + 1);
+  end;
+
+
+  procedure Utf8StringContractsTests.IsLongerThanRaisesNoExceptionWhenArgumentIsLonger;
+  begin
+    Test.RaisesNoException;
+
+    Contract.Requires('test', Utf8Digits).IsLongerThan(Length(Utf8Digits) - 1);
+  end;
+
+
+  procedure Utf8StringContractsTests.IsNotLongerThanRaisesExceptionWhenArgumentIsLonger;
+  begin
+    Test.Raises(EArgumentException);
+
+    Contract.Requires('test', Utf8Digits).IsNotLongerThan(Length(Utf8Digits) - 1);
+  end;
+
+
+  procedure Utf8StringContractsTests.IsNotLongerThanRaisesNoExceptionWhenArgumentIsShorterOrEqual;
+  begin
+    Test.RaisesNoException;
+
+    Contract.Requires('test', Utf8Digits).IsNotLongerThan(Length(Utf8Digits) + 1);
+    Contract.Requires('test', Utf8Digits).IsNotLongerThan(Length(Utf8Digits));
+  end;
 
 
   procedure Utf8StringContractsTests.Utf8StringIsNotEmptyDoesNotRaiseExceptionWhenArgumentIsNotAnEmptyString;
